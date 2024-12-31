@@ -38,19 +38,31 @@ class _MoviePageState extends State<MoviePage> {
               ),
               height: constraints.maxHeight,
               width: constraints.maxWidth,
-              child: ListView.builder(
-                  itemCount: state.popularMovies.length,
-                  itemBuilder: (context, index) {
-                    final Movie movie = state.popularMovies[index];
-                    return AnimatedEntryWidget(
-                      type: AnimationType.slideInFromLeft,
-                      duration: const Duration(seconds: 1),
-                      child: CustomCard(
-                        movie: movie,
-                        constraints: constraints,
+              child: state.movieStatus == MovieStatus.loading
+                  ? Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CircularProgressIndicator.adaptive(),
+                          CustomText(text: "Cargando peliculas...")
+                        ],
                       ),
-                    );
-                  }),
+                    )
+                  : ListView.builder(
+                      itemCount: state.popularMovies.length,
+                      itemBuilder: (context, index) {
+                        final Movie movie = state.popularMovies[index];
+                        return AnimatedEntryWidget(
+                          type: AnimationType.slideInFromLeft,
+                          duration: const Duration(seconds: 1),
+                          child: CustomCard(
+                            movie: movie,
+                            constraints: constraints,
+                          ),
+                        );
+                      }),
             );
           },
         );
